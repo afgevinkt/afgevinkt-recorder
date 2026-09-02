@@ -1,0 +1,73 @@
+# Packaging-config voor de installers (Afgevinkt Recorder).
+# Bouwen: `npm run dist:mac` (op macOS) of `npm run dist:win` (op Windows).
+# Levert .dmg (macOS) en .exe/NSIS (Windows) in de map `release/`.
+# Codesigning/notarisatie: vul je certificaten via env-variabelen aan
+# (CSC_LINK/CSC_KEY_PASSWORD voor macOS; WIN_CSC_LINK voor Windows).
+appId: nl.afgevinkt.recorder
+productName: Afgevinkt Recorder
+copyright: © Afgevinkt! Finance B.V.
+
+# De native modules (onnxruntime-node, uiohook-napi) zijn N-API met meegeleverde
+# prebuilds (ABI-stabiel). Herbouwen via node-gyp is dus onnodig én faalt zonder
+# Visual Studio Build Tools/Python — daarom uit.
+npmRebuild: false
+
+directories:
+  output: release
+  buildResources: build
+
+# electron-vite bouwt naar out/. Native modules moeten buiten de asar blijven.
+files:
+  - out/**/*
+  - package.json
+asarUnpack:
+  - "**/node_modules/onnxruntime-node/**"
+  - "**/node_modules/uiohook-napi/**"
+  - "**/node_modules/@huggingface/**"
+
+mac:
+  category: public.app-category.productivity
+  icon: build/icon.png
+  target:
+    - target: dmg
+      arch:
+        - arm64
+        - x64
+  artifactName: "Afgevinkt-Recorder-${version}-mac-${arch}.${ext}"
+  # Hardened runtime + entitlements zijn vereist voor notarisatie.
+  hardenedRuntime: true
+  gatekeeperAssess: false
+  entitlements: build/entitlements.mac.plist
+  entitlementsInherit: build/entitlements.mac.plist
+  # Notarisatie: zet op `true` zodra je een Developer ID-certificaat + Apple-
+  # credentials in de omgeving hebt (APPLE_ID + APPLE_APP_SPECIFIC_PASSWORD +
+  # APPLE_TEAM_ID, óf APPLE_API_KEY + APPLE_API_KEY_ID + APPLE_API_ISSUER).
+  # Laat op `false` voor ongetekende builds — anders faalt de build.
+  # (Hoort onder `mac:`; op root-niveau weigert electron-builder 25 de config.)
+  notarize: false
+  # Camera/microfoon/scherm: nette OS-toestemmingsteksten.
+  extendInfo:
+    NSCameraUsageDescription: Afgevinkt Recorder gebruikt je camera voor de webcam-opname.
+    NSMicrophoneUsageDescription: Afgevinkt Recorder gebruikt je microfoon om je toelichting op te nemen.
+
+dmg:
+  title: Afgevinkt Recorder ${version}
+
+win:
+  icon: build/icon.png
+  target:
+    - nsis
+  artifactName: "Afgevinkt-Recorder-${version}-win.${ext}"
+
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  shortcutName: Afgevinkt Recorder
+
+linux:
+  icon: build/icon.png
+  category: Utility
+  target:
+    - AppImage
+  artifactName: "Afgevinkt-Recorder-${version}-linux-${arch}.${ext}"

@@ -1,0 +1,14 @@
+# Deterministische regeleindes: repo slaat LF op, ongeacht Windows/Mac.
+* text=auto eol=lf
+
+# Windows-batchbestand heeft CRLF nodig.
+*.bat text eol=crlf
+
+# macOS-startscript moet LF houden (anders start het niet).
+*.command text eol=lf
+
+# Binaire assets nooit converteren.
+*.png binary
+*.jpg binary
+*.ico binary
+*.icns binary

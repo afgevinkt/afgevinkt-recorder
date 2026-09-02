@@ -1,0 +1,37 @@
+{
+  "name": "afgevinkt-recorder",
+  "version": "0.2.1",
+  "description": "Afgevinkt Recorder — schermopname-tool (Opnames) voor Afgevinkt!",
+  "productName": "Afgevinkt Recorder",
+  "author": "Afgevinkt! Finance B.V.",
+  "private": true,
+  "main": "./out/main/index.js",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "start": "electron-vite preview",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "dist": "electron-vite build && electron-builder",
+    "dist:mac": "electron-vite build && electron-builder --mac",
+    "dist:win": "electron-vite build && electron-builder --win"
+  },
+  "dependencies": {
+    "@huggingface/transformers": "^3.7.6",
+    "fix-webm-duration": "^1.0.6",
+    "onnxruntime-node": "^1.21.0",
+    "uiohook-napi": "^1.5.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "electron": "^31.7.7",
+    "electron-builder": "^25.1.8",
+    "electron-vite": "^2.3.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "typescript": "^5.9.3",
+    "vite": "^5.4.0"
+  }
+}

@@ -1,0 +1,13 @@
+node_modules/
+out/
+dist/
+release/
+.DS_Store
+*.log
+.gstack/
+
+# Machine-lokale Claude-instellingen (permissies e.d.)
+.claude/settings.local.json
+
+# OneDrive-conflictkopieën ("bestand-MacBook Pro van X.ext")
+*-MacBook*.yml
